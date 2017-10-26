@@ -1,45 +1,47 @@
 #class definition of bin object and other related code
 class Bin:
-	__company = ""
-	__address = ""
-	__city = ""
-	__postalCode = ""
-	__longitude = ""
-	__latitude = ""
-	__name =""
-	__type = ""
+    company = ""
+    address = ""
+    city = ""
+    postalCode = ""
+    coordinate = ""
+    name =""
 
-	def __init__(self, company, address, city, postalCode, longitude, latitude, name):
-		self.company = company
-		self.address = address
-		self.city = city
-		self.postalCode = postalCode
-		self.longitude = longitude
-		self.name = name
-        
-        def getCompany()
-            return self.company
+    def __init__(self, company, address, city, postalCode, coordinate, name):
+        self.company = company
+        self.address = address
+        self.city = city
+        self.postalCode = postalCode
+        self.coordinate = coordinate
+        self.name = name
 
-        def getAddress()
-            return self.address
+    def __str__(self):
+        return "Data in this bin: \n" + "Company: " + self.company + "\nAddress: " +  self.address + "\nCity: " +  self.city + "\nName: " + self.name + "\nCoordinates: " + self.coordinate
 
-        def getCity()
-            return self.city
+    def getCompany(self):
+        return self.company
+    def getAddress(self):
+        return (self.address + self.city + "British Columbia, Canada")
+    def getCity(self):
+        return self.city
+    def getPostalCode(self):
+        return self.postalscode
+    def getCoordinate(self):
+        return self.coordinate
+    def getName(self):
+        return self.names
+    def getContents(self):
+        return self.company + self.address + self.city + self.postalCode + self.coordinate + self.name
 
-        def getPostalCode()
-            return self.postalcode
-
-        def getLongitude()
-            return self.longitude
-
-        def getLatitude()
-            return self.latitude
-
-        def getName()
-            return self.name
-
-        def getType()
-            return self.type
-
-        def toString()
-            return self.company + "is at" + self.address + ", " + self.city
+    def setCompany(company):
+        self.company = companys
+    def setAddress(address):
+        self.address = address
+    def setCity(city):
+        self.city = city
+    def setPostalCode(postalcode):
+        self.postalcode = postalcode
+    def setCoordinate(coordinatee):
+        self.coordinate = coordinate
+    def setName(name):
+        self.name = name

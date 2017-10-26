@@ -22,22 +22,22 @@ for sub1 in filtered1:
     print("------------")
 
 class Bin:
-	__company = ""
-	__address = ""
-	__city = ""
-	__postalCode = ""
-	__longitude = ""
-	__latitude = ""
-	__name =""
+    __company = ""
+    __address = ""
+    __city = ""
+    __postalCode = ""
+    __longitude = ""
+    __latitude = ""
+    __name =""
         __type = ""
 
-	def __init__(self, company, address, city, postalCode, longitude, latitude, name):
-		self.company = company
-		self.address = address
-		self.city = city
-		self.postalCode = postalCode
-		self.longitude = longitude
-		self.name = name
+    def __init__(self, company, address, city, postalCode, longitude, latitude, name):
+        self.company = company
+        self.address = address
+        self.city = city
+        self.postalCode = postalCode
+        self.longitude = longitude
+        self.name = name
         def getCompany()
             return self.company
 
