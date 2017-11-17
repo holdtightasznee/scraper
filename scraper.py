@@ -47,16 +47,15 @@ print(k.to_string(prettyprint=True))
 googleApiKey = "AIzaSyCr90UZMD3fl6SLE7cHIDvWF4yofQdWIgk"
 gmaps = googlemaps.Client(key=googleApiKey)
 
+list = []
 
 #Salvation Army Thrift Store - done
 print("Salvation Army")
 url1 = "https://www.thriftstore.ca/british-columbia/drop-bin-locations"
 r1 = requests.get(url1)
-
+print("Salvation army request")
 soup1 = BeautifulSoup(r1.content,"lxml")
 filtered1 = soup1.find_all("tr")
-
-list = []
 
 for td in filtered1:
 	inter = td.find_all("span")
@@ -75,6 +74,8 @@ for td in filtered1:
 		count += 1
 	list.append(addBin)
 
+
+#WORKING
 #Inclusion BC & CPABC Clothing
 print("Inclusion BC and CPABC Clothing")
 url2 = "http://www.google.com/maps/d/kml?mid=1kqVfqYiPtnqrO8L5zC_yVkAiwB0&forcekml=1"
@@ -109,6 +110,7 @@ for item in list:
 	if item.address:
 		list.remove(item)
 
+#WORKING
 #Diabetes Canada
 print("Diabetes Canada")
 url1 = "http://www.diabetes.ca/dropBoxes/phpsqlsearch_genxml.php?&lat=49.2057&lng=-122.9110&radius=50"
@@ -124,9 +126,8 @@ for item in filtered:
 	addBin.company = "Diabetes Canada"
 	list.append(addBin)
 
-
-
-'''#Big Brothers
+#WORKING
+#Big Brothers
 print("Big Brothers")
 url = "https://www.bigbrothersvancouver.com/clothing-donation/donation-bins/"
 browser = webdriver.PhantomJS()
@@ -134,19 +135,28 @@ browser.get(url)
 time.sleep(1)
 html = browser.page_source
 soup = BeautifulSoup(html, 'lxml')
-filtered1 = soup.find_all("span", {"class":"slp_result_address"})
+filtered1 = soup.find_all("div", {"class":"location_secondary"})
 for item in filtered1:
-	print(item['class'])
-	print(item.text.strip())
-browser.close()'''
+	#print(item)
+	item_street = item.find_all("span", {"class": "slp_result_street"})
+	item_city = item.find_all("span", {"class": "slp_result_citystatezip"})
+	addBin = Bin("", "", "", "", "", "")
+	addBin.address = item_street[0].text.strip() + " " +item_city[0].text.strip()
+	addBin.company = "Big Brothers"
+	list.append(addBin)
 
-'''for item in list:
-	print("-----------------------")
-	print(item)
-	print("-----------------------")'''
+browser.close()
 
+'''
+Traceback (most recent call last):
+  File "scraper.py", line 193, in <module>
+    item.coordinate = geocode_result[0]['geometry']['location']
+IndexError: list index out of range
+'''
+'''
 #Develop BC
-'''print("develop bc")
+print("develop bc")
+
 url = "http://www.develop.bc.ca/donate/"
 with closing(PhantomJS()) as browser:
    browser.get(url)
@@ -154,7 +164,13 @@ with closing(PhantomJS()) as browser:
 #r = urllib2.urlopen("http://www.bcchauxiliary.com/our-businesses/clothing-donation-bin-program/")
 #html = r.read()
 
-gmaps = googlemaps.Client(key="AIzaSyDqGPoS9GUio0FZndRTdnvNDFIatMHGeus")
+#gmaps = googlemaps.Client(key="AIzaSyDqGPoS9GUio0FZndRTdnvNDFIatMHGeus")
+
+url = "http://www.develop.bc.ca/donate/"
+browser = webdriver.PhantomJS()
+browser.get(url)
+time.sleep(1)
+html = browser.page_source
 
 soup = BeautifulSoup(html, "lxml")
 individual_results = soup.find_all("div", {"class":"results_wrapper"})
@@ -167,8 +183,8 @@ for result in individual_results:
        if('slp_result_citystatezip' in address_component.get("class")):
            address += ", "
 
-print(address)'''
-  
+print(address)
+'''
 
 #geoencoding
 for item in list:
@@ -177,13 +193,15 @@ for item in list:
 		print(coordinateRaw)
 		coordinate = coordinateRaw.split(",")
 		reverse_geocode_result = gmaps.reverse_geocode((coordinate[1],coordinate[0]))
+		print(item.getCompany())
 		print(reverse_geocode_result[0]['formatted_address'])
 
 
 	elif item.getAddress():
 		address = item.getAddress()
 		geocode_result = gmaps.geocode(address)
-		item.coordinate = reverse_geocode_result[0]['geometry']['location']
+		item.coordinate = geocode_result[0]['geometry']['location']
+		print(item.getCompany())
 		print(geocode_result[0]['formatted_address'])
 
 
