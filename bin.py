@@ -31,7 +31,7 @@ class Bin:
     def getName(self):
         return self.names
     def getContents(self):
-        return self.company + self.address + self.city + self.postalCode + self.coordinate + self.name
+        return  self.name + " " + self.address + " " + self.postalCode
 
     def setCompany(company):
         self.company = companys
