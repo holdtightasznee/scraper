@@ -171,7 +171,8 @@ for item in list:
 		reverse_geocode_result = gmaps.reverse_geocode((coordinate[1],coordinate[0]))
 		item.coordinate = str(reverse_geocode_result[0]['geometry']['location']['lng']) + ", " + str(reverse_geocode_result[0]['geometry']['location']['lat']) + ", 0"
 		item.address= reverse_geocode_result[0]['formatted_address'] #save the returned address
-		kml.newpoint(name=item.getCompany(), coords=[(item.getCoordinate())])  # lon, lat, optional height
+		coordinate = item.getCoordinate().split(",")
+		kml.newpoint(name=item.getCompany(), coords=[(coordinate[0],coordinate[1],coordinate[2])], description=item.getAddress())  # lon, lat, optional height
 		print(item.getCompany())
 		print(item.getAddress())
 		print(item.getCoordinate())
@@ -181,14 +182,14 @@ for item in list:
 		geocode_result = gmaps.geocode(address)
 		item.coordinate = str(geocode_result[0]['geometry']['location']['lng'])  + ", " + str(geocode_result[0]['geometry']['location']['lat']) + ", 0"
 		item.address = geocode_result[0]['formatted_address'] #save the returned address
-		kml.newpoint(name=item.getCompany(), coords=[(item.getCoordinate())])  # lon, lat, optional height
+		coordinate = item.getCoordinate().split(",")
+		kml.newpoint(name=item.getCompany(), coords=[(coordinate[0],coordinate[1],coordinate[2])], description=item.getAddress() ) # lon, lat, optional height
 		print(item.getCompany())
 		print(item.getAddress())
 		print(item.getCoordinate())
 
-
 print(kml)
-kml.save("testingplot.kml")
+kml.save("plot.kml")
 
 #for item in list:
 #	print(item)
