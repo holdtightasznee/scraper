@@ -55,7 +55,7 @@ except requests.exceptions.RequestException as e:
 
 #WORKING
 #Inclusion BC & CPABC Clothing
-'''
+
 #InclusionBC
 try:
 	url2 = "http://www.google.com/maps/d/kml?mid=1kqVfqYiPtnqrO8L5zC_yVkAiwB0&forcekml=1"
@@ -128,7 +128,7 @@ for item in filtered1:
 	list.append(addBin)
 
 browser.close()
-
+'''
 #Develop BC
 print("develop bc")
 
@@ -140,7 +140,7 @@ with closing(PhantomJS()) as browser:
 #html = r.read()
 
 #gmaps = googlemaps.Client(key="AIzaSyDqGPoS9GUio0FZndRTdnvNDFIatMHGeus")
-
+'
 url = "http://www.develop.bc.ca/donate/"
 browser = webdriver.PhantomJS()
 browser.get(url)
@@ -171,7 +171,9 @@ for item in list:
 		reverse_geocode_result = gmaps.reverse_geocode((coordinate[1],coordinate[0]))
 		item.coordinate = str(reverse_geocode_result[0]['geometry']['location']['lng']) + ", " + str(reverse_geocode_result[0]['geometry']['location']['lat']) + ", 0"
 		item.address= reverse_geocode_result[0]['formatted_address'] #save the returned address
-		kml.newpoint(name=item.getCompany(), coords=[(item.getCoordinate())])  # lon, lat, optional height
+		coordinate = item.getCoordinate().split(",")
+		kml.newpoint(name=item.getCompany(),description=item.getContents(), coords=[(coordinate[0],coordinate[1],coordinate[2])])  # lon, lat, optional height
+		print(item.getContents())
 		print(item.getCompany())
 		print(item.getAddress())
 		print(item.getCoordinate())
@@ -181,13 +183,12 @@ for item in list:
 		geocode_result = gmaps.geocode(address)
 		item.coordinate = str(geocode_result[0]['geometry']['location']['lng'])  + ", " + str(geocode_result[0]['geometry']['location']['lat']) + ", 0"
 		item.address = geocode_result[0]['formatted_address'] #save the returned address
-		kml.newpoint(name=item.getCompany(), coords=[(item.getCoordinate())])  # lon, lat, optional height
+		coordinate = item.getCoordinate().split(",")
+		kml.newpoint(name=item.getCompany(),description=item.getContents(), coords=[(coordinate[0],coordinate[1],coordinate[2])] ) # lon, lat, optional height
 		print(item.getCompany())
 		print(item.getAddress())
 		print(item.getCoordinate())
 
-
-print(kml)
 kml.save("testingplot.kml")
 
 #for item in list:
