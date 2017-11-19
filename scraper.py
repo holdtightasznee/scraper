@@ -45,7 +45,7 @@ try:
 			elif (count == 1):
 				addBin.company = value
 			elif (count == 2):
-				addBin.address = value
+				addBin.address = value + "British Columbia, Canada"
 			else:
 				addBin.city = value
 			count += 1
