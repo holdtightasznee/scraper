@@ -15,36 +15,12 @@ from contextlib import closing
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 import time
-from fastkml import kml
+import simplekml
 
-k = kml.KML()
-ns = '{http://www.opengis.net/kml/2.2}'
-# Create a KML Document and add it to the KML root object
-d = kml.Document(ns, 'docid', 'doc name', 'doc description')
-k.append(d)
-
-# Create a KML Folder and add it to the Document
-f = kml.Folder(ns, 'fid', 'f name', 'f description')
-d.append(f)
-
-# Create a KML Folder and nest it in the first Folder
-nf = kml.Folder(ns, 'nested-fid', 'nested f name', 'nested f description')
-f.append(nf)
-
-# Create a second KML Folder within the Document
-f2 = kml.Folder(ns, 'id2', 'name2', 'description2')
-d.append(f2)
-
-# Create a Placemark with a simple polygon geometry and add it to the
-# second folder of the Document
-p = kml.Placemark(ns, 'id', 'name', 'description')
-f2.append(p)
-
-# Print out the KML Object as a string
-print(k.to_string(prettyprint=True))
+kml = simplekml.Kml()
 
 #Google API information
-googleApiKey = "AIzaSyCr90UZMD3fl6SLE7cHIDvWF4yofQdWIgk"
+googleApiKey = "AIzaSyAOyu_oSTIsdrxgYm6Fby0DckoZGMdJECA"
 gmaps = googlemaps.Client(key=googleApiKey)
 
 list = []
@@ -69,7 +45,7 @@ try:
 			elif (count == 1):
 				addBin.company = value
 			elif (count == 2):
-				addBin.address = value
+				addBin.address = value + "British Columbia, Canada"
 			else:
 				addBin.city = value
 			count += 1
@@ -79,7 +55,7 @@ except requests.exceptions.RequestException as e:
 
 #WORKING
 #Inclusion BC & CPABC Clothing
-
+'''
 #InclusionBC
 try:
 	url2 = "http://www.google.com/maps/d/kml?mid=1kqVfqYiPtnqrO8L5zC_yVkAiwB0&forcekml=1"
@@ -96,8 +72,7 @@ try:
 except requests.exceptions.RequestException as e:
 	print (e)
 
-
-#InclusionBC
+#Cerebral Palsy
 try:
 	url3 = "https://www.google.com/maps/d/kml?mid=1ekVOoKgoAW2vIjiDh3DmP4OU04g&forcekml=1"
 	r3 = requests.get(url3)
@@ -112,11 +87,6 @@ try:
 		list.append(addBin)
 except requests.exceptions.RequestException as e:
 	print (e)
-
-
-for item in list:
-	if item.address:
-		list.remove(item)
 
 #WORKING
 #Diabetes Canada
@@ -159,13 +129,6 @@ for item in filtered1:
 
 browser.close()
 
-'''
-Traceback (most recent call last):
-  File "scraper.py", line 193, in <module>
-    item.coordinate = geocode_result[0]['geometry']['location']
-IndexError: list index out of range
-'''
-'''
 #Develop BC
 print("develop bc")
 
@@ -196,26 +159,36 @@ for result in individual_results:
            address += ", "
 
 print(address)
+
 '''
+print("getting here")
 
 #geoencoding
 for item in list:
 	if item.getCoordinate():
 		coordinateRaw = item.getCoordinate()
-		print(coordinateRaw)
 		coordinate = coordinateRaw.split(",")
 		reverse_geocode_result = gmaps.reverse_geocode((coordinate[1],coordinate[0]))
+		item.coordinate = str(reverse_geocode_result[0]['geometry']['location']['lng']) + ", " + str(reverse_geocode_result[0]['geometry']['location']['lat']) + ", 0"
+		item.address= reverse_geocode_result[0]['formatted_address'] #save the returned address
+		kml.newpoint(name=item.getCompany(), coords=[(item.getCoordinate())])  # lon, lat, optional height
 		print(item.getCompany())
-		print(reverse_geocode_result[0]['formatted_address'])
-
+		print(item.getAddress())
+		print(item.getCoordinate())
 
 	elif item.getAddress():
 		address = item.getAddress()
 		geocode_result = gmaps.geocode(address)
-		item.coordinate = geocode_result[0]['geometry']['location']
+		item.coordinate = str(geocode_result[0]['geometry']['location']['lng'])  + ", " + str(geocode_result[0]['geometry']['location']['lat']) + ", 0"
+		item.address = geocode_result[0]['formatted_address'] #save the returned address
+		kml.newpoint(name=item.getCompany(), coords=[(item.getCoordinate())])  # lon, lat, optional height
 		print(item.getCompany())
-		print(geocode_result[0]['formatted_address'])
+		print(item.getAddress())
+		print(item.getCoordinate())
 
 
+print(kml)
+kml.save("testingplot.kml")
 
-
+#for item in list:
+#	print(item)
