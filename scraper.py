@@ -11,20 +11,15 @@ from bin import Bin
 from selenium import webdriver
 import time
 import simplekml
-from git import Repo
-repo_dir = 'scraper'
-repo = Repo(repo_dir)
-file_list = [
-    'generatedkml/CerebralPalsy.kml',
-    'generatedkml/DiabetesCanada.kml'
-    'generatedkml/InclusionBC.kml'
-    'generatedkml/SalvationArmy.kml'
-]
-commit_message = 'Add simple regression analysis'
-repo.index.add(file_list)
-repo.index.commit(commit_message)
-origin = repo.remote('origin')
-origin.push()
+
+from pydrive.auth import GoogleAuth
+
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth() # Creates local webserver and auto handles authentication.
+
+file1 = drive.CreateFile({'title': 'Hello.kml'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
+file1.SetContentString('Hello World!') # Set content of the file from given string.
+file1.Upload()
 # Google API information
 googleApiKey = "AIzaSyAOyu_oSTIsdrxgYm6Fby0DckoZGMdJECA"
 gmaps = googlemaps.Client(key=googleApiKey)
